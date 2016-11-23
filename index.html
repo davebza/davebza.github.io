@@ -1,0 +1,151 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>matchingGame V1.3 Alpha</title>
+    
+    <meta name="description" content="Matching Game">
+    <meta name="author" content="Dave Brown">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <style>
+        
+        #leftSide {
+            
+            position: absolute;
+            display: inline-block;
+            width: 500px;
+            height: 500px;
+            
+        }
+        
+        #rightSide {
+            
+            display: inline-block;
+            position: absolute;
+            margin-right: 150px;
+            width: 500px;
+            height: 500px;
+            left: 500px;
+            border-left: 3px solid black;
+        }
+        
+        img {
+            
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+    
+    </style>
+
+</head>
+<body id = "body">
+    
+    <div id = "header">
+        <h1>Matching Game</h1>
+        <p>Click on the extra smiling face on the left hand side.</p>
+    </div>
+    
+    <div id = "leftSide">
+    </div>
+    
+    <div id = "rightSide">
+    </div>
+       
+    <!-- Javascript includes go here, for performance -->
+    <script>
+        
+        // Global variable declarations:
+        var theLeftSide = document.getElementById("leftSide");
+        var theRightSide = document.getElementById("rightSide");
+        var theBody = document.getElementById("body");
+        var numberToMake = 5;
+        
+        //function declarations:
+        
+        function makeAFace() {
+            
+            //Set the random positioning variables:
+            var leftPosition = Math.floor(Math.random()*450) + "px";
+            var topPosition = Math.floor(Math.random()*450) + "px";
+                
+            //Create img element:
+            var imageInstance = document.createElement("img");
+            
+            //set attributes for: src, size, id:
+            imageInstance.setAttribute("src", "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png");
+            imageInstance.setAttribute("width", "50px");
+            
+            //append this image to the page and set position:
+            theLeftSide.appendChild(imageInstance);
+            imageInstance.style.top = topPosition;
+            imageInstance.style.left = leftPosition;
+            
+        }
+        
+        function makeNumberOfFaces(numberToMake){
+            //this function makes five smileys by calling the makeAFace function five times:
+            for (var i =0; i < numberToMake; i++) {
+                makeAFace();
+            }
+        }
+        
+        function cloneLeftAndRemoveOne() {
+            
+            //clone the face images on leftSide and append to rightSide:
+            var leftSideImages = theLeftSide.cloneNode(true);
+            
+            // remove last child and append to right side:
+            leftSideImages.removeChild(leftSideImages.lastChild);
+            document.getElementById("rightSide").appendChild(leftSideImages);
+            
+        }
+        
+        function deleteAllFaces() {
+            
+            var targetNode = document.getElementById("leftSide");
+            while (targetNode.firstChild) {
+                target.removeChild(targetNode.firstChild);
+                }
+            }
+        
+         function doGame() {
+            
+            var keepPlaying = true;
+             
+            makeNumberOfFaces(numberToMake);
+            cloneLeftAndRemoveOne();
+             
+            theLeftSide.lastChild.onclick = function nextLevel(event){
+
+                //deleteAllFaces();
+                event.stopPropagation();
+                numberToMake +=5;
+                makeNumberOfFaces(numberToMake);
+                cloneLeftAndRemoveOne();
+
+                };
+             
+             theBody.onclick = function gameOver() {
+
+                alert("Game Over!");
+                theBody.onclick = null;
+                theLeftSide.lastChild.onclick = null;
+                keepPlaying = false;
+                return keepPlaying;
+
+                };
+                
+        }
+        
+        //main program starts here:
+        window.onload = doGame();
+ 
+    </script>
+    
+</body>
+</html>
